@@ -1,6 +1,5 @@
 package pl.uj.io.cuteanimals.controller;
 
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +41,7 @@ public class GameController {
         try {
             var result = gameService.execute(id, command);
 
-            // TODO: fix printing nested results
-            if (result instanceof CompoundResult) {
-                logger.info("Adding color to compound Result");
-
-                return ((CompoundResult) result)
-                        .getResults()
-                        .stream()
-                        .map(this::addColor)
-                        .collect(Collectors.joining("\n"));
-            }
-
-            logger.trace("Adding color to normal Result with message:");
+            logger.trace("Adding color to Result with message:");
             logger.debug(result.getMessage());
             return addColor(result);
         } catch (InvalidCommandException e) {
@@ -67,7 +55,7 @@ public class GameController {
 
         if (result instanceof CompoundResult) {
             for (var r : ((CompoundResult) result).getResults()) {
-                stringResult.append(addColor(r));
+                stringResult.append(addColor(r)).append("\n");
             }
         } else {
             var color = result.getColor();
