@@ -2,6 +2,7 @@ package pl.uj.io.cuteanimals.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
+import pl.uj.io.cuteanimals.model.ItemClass;
 import pl.uj.io.cuteanimals.model.ItemType;
 import pl.uj.io.cuteanimals.model.interfaces.IAttributes;
 import pl.uj.io.cuteanimals.model.interfaces.IItem;
@@ -36,6 +37,10 @@ public class Item implements IItem {
     @Enumerated(EnumType.STRING)
     private final ItemType type;
 
+    @JsonProperty("itemClass")
+    @Enumerated(EnumType.STRING)
+    private final ItemClass itemClass;
+
     public Item() {
         this.id = 0;
         this.name = null;
@@ -43,6 +48,7 @@ public class Item implements IItem {
         this.size = 0;
         this.attributes = null;
         this.type = ItemType.NEUTRAL;
+        this.itemClass = ItemClass.ANY;
     }
 
     public Item(
@@ -51,26 +57,37 @@ public class Item implements IItem {
             @JsonProperty("description") String description,
             @JsonProperty("size") int size,
             @JsonProperty("attributes") Attributes attributes,
-            @JsonProperty("type") ItemType type) {
+            @JsonProperty("type") ItemType type,
+            @JsonProperty("itemClass") ItemClass itemClass) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.size = size;
         this.attributes = attributes;
         this.type = type;
+        this.itemClass = itemClass;
     }
 
     @Override
     public String toString() {
-        return name
-                + ", "
+        return "Item{"
+                + "id="
+                + id
+                + ", name='"
+                + name
+                + '\''
+                + ", description='"
                 + description
-                + ". Type: "
-                + type.toString()
-                + ". Size: "
+                + '\''
+                + ", size="
                 + size
-                + ". "
-                + attributes;
+                + ", attributes="
+                + attributes
+                + ", type="
+                + type
+                + ", itemClass="
+                + itemClass
+                + '}';
     }
 
     @Override
@@ -96,5 +113,10 @@ public class Item implements IItem {
     @Override
     public ItemType getType() {
         return type;
+    }
+
+    @Override
+    public ItemClass getItemClass() {
+        return itemClass;
     }
 }
